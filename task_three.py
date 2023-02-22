@@ -1,67 +1,74 @@
 """
-The task 2 goes like following:
-Pull data for the the first movie in star wars
-Write the json data into a file named output.txt
-
-
-SUBTASKS -
-1. Output should be only list of names (first name & last name) of characters
-in the movie.
-2. Output should only print list of planet names used in the movie
-3. Output should only print list of vehicle names used in the movie.
+1. TODO - import all resource classes here
+2. TODO - get count of each resource
+3. TODO - get singular resource URL from each resource
+    - for example,
+    - hit plural URL of starships and that will list all starships data
+    - iterate on each starship data and capture singular URLs
+    - all_starship_data = data.get("results")
+    - you will iterate on `all_starship_data`,
+4. TODO - pull data from random 3 "singular" resource URLs
+    - utilize`utils` package to produce random 3 numbers from resource ids
+    - and pull data for them
+5. TODO - convert the script into CLI application
+6. TODO - pretty print output (from pprint import pprint)
 """
 
-import json
-import requests
-
+# resource classes
+from resources.films import Film
+from resources.characters import Character
+from resources.planets import Planet
+from resources.species import Species
+from resources.starships import Starship
+from resources.vehicles import Vehicle
 from pprint import pprint
-from typing import Dict, List
-
-from utils.fetch_data import hit_url, fetch_data
-
-FIRST_FILM_URL = "https://swapi.dev/api/films/1/"
+from resources.base import ResourceBase
+from utils.fetch_data import hit_url
 
 
-def write_data_into_file(data: Dict) -> None:
-    """writes dict data into a file"""
-
-    with open("output.txt", "w") as fp:
-        fp.write(json.dumps(data))
-
-
-def first_task() -> Dict:
-    """Returns a dict object from swapi.dev/api/films/1"""
-
-    response = requests.get(FIRST_FILM_URL)
-    result_ = response.json()
-    write_data_into_file(result_)
-    return result_
+# pydantic classes (models)
+from models.datamodels.characters import Character_
+from models.datamodels.films import Film_
+from models.datamodels.planets import Planet_
+from models.datamodels.starships import Starship_
+from models.datamodels.vehicles import Vehicle_
+from models.datamodels.species import Species_
 
 
-def second_task(data_: Dict) -> List:
-    """pull data from swapi characters sequentially"""
+def __init__(self) -> None:
+    super().__init__()
+    self.relative_url = "/api/vehicles"
 
-    characters = data_.get("characters")  # returns None by default
-
-    names = []
-    for character in characters:
-        character_data = hit_url(character)
-        character_data = character_data.json()
-        names.append(character_data.get("name"))
-
-    # names = []
-    # all_characters = fetch_data(characters)
-    # for character in all_characters:
-    #     names.append(character.get("name"))
-
-    return names
-
+def get_count(self):
+    complete_url = self.home_url + self.relative_url
+    response = hit_url(complete_url)
+    data = response.json()
+    count = data.get("count")
+    return count
 
 if __name__ == "__main__":
-    # first task
-    first_result = first_task()
-    pprint(first_result)
 
-    # second task
-    second_result = second_task(first_result)
-    pprint(second_result)
+    character_data = Character().get_sample_data()
+    character_data = Character_(**character_data)
+    pprint(character_data)
+
+    film_data = Film().get_sample_data()
+    film_data = Film_(**film_data)
+    pprint(film_data)
+
+    planets_data = Planet().get_sample_data()
+    planets_data = Planet_(**planets_data)
+    pprint(planets_data)
+
+    species_data = Species().get_sample_data()
+    species_data = Species_(**species_data)
+    pprint(species_data)
+
+    starships_data = Starship().get_sample_data(id_=9)
+    starships_data = Starship_(**starships_data)
+    pprint(starships_data)
+
+    vehicles_data = Vehicle().get_sample_data(id_=4)
+    vehicles_data = Vehicle_(**vehicles_data)
+    pprint(vehicles_data)
+
