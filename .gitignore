@@ -3,3 +3,5 @@
 venv
 *.pyc
 *.idea
+secrets.toml
+secrets.yaml

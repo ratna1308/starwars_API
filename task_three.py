@@ -46,6 +46,13 @@ def get_count(self):
     count = data.get("count")
     return count
 
+def get_url():
+    home_url = "https://swapi.dev"
+    relative_url = "/api/films/"
+    absolute_url = home_url + relative_url
+    return absolute_url
+
+
 if __name__ == "__main__":
 
     character_data = Character().get_sample_data()
@@ -72,3 +79,24 @@ if __name__ == "__main__":
     vehicles_data = Vehicle_(**vehicles_data)
     pprint(vehicles_data)
 
+############get count of each resource#########################################################
+
+    character_data = Character().get_count()
+    pprint(character_data)
+
+    film_data = Film().get_count()
+    pprint(film_data)
+
+    planets_data = Planet().get_count()
+    pprint(planets_data)
+
+    species_data = Species().get_count()
+    pprint(species_data)
+
+    starships_data = Starship().get_count()
+    pprint(starships_data)
+
+    vehicles_data = Vehicle().get_count()
+    pprint(vehicles_data)
+
+###################################################################################################
