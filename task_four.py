@@ -13,10 +13,49 @@ For example - "A new hope" movie has following resource endpoints -
 
 from resources.films import Film   # resource model
 from models.datamodels.films import Film_  # pydantic model
+from models.datamodels.characters import Character_
 
 from dal.db_conn_helper import get_db_conn
+from dal.dml import insert_resource
+from utils.fetch_data import hit_url
+from utils.timing import timeit
 
 
+@timeit
+def store_characters():
+    characters = film_data.characters
+    characters_data = []
+
+    char_columns = [
+        "name",
+        "height",
+        "mass",
+        "hair_color"
+    ]
+
+    for character in characters:
+        response = hit_url(character)
+        char = response.json()
+        char = Character_(**char)
+        char_values = [
+            char.name,
+            char.height,
+            char.mass,
+            char.hair_color
+        ]
+        # breakpoint()
+        char_id = int(character.split("/")[-2])
+        result = insert_resource(
+            "characters",
+            "char_id",
+            char_id,
+            char_columns,
+            char_values
+        )
+        characters_data.append(char)
+    return characters_data
+
+breakpoint()
 if __name__ == "__main__":
     data = Film().get_sample_data(id_=1)
     film_data = Film_(**data)
@@ -24,12 +63,49 @@ if __name__ == "__main__":
     # create DB connection
     conn = get_db_conn()
 
-    # to create a sql query to insert data into database.
-    # DDL - CREATE
-    # DML - SELECT, INSERT, UPDATE
+    film_columns = [
+        "title",
+        "opening_crawl",
+        "director",
+        "producer",
+        "release_date",
+        "created",
+        "edited",
+        "url",
+    ]
 
-    magic_sql = "INSERT INTO {database}.{table} ({column1}, {column2}, ....)" \
-                "VALUES ({value1}, {value2})"
+    film_values = [
+        film_data.title,
+        film_data.opening_crawl,
+        film_data.director,
+        film_data.producer,
+        film_data.release_date,
+        film_data.created.strftime("%y-%m-%d"),
+        film_data.edited.strftime("%y-%m-%d"),
+        film_data.url,
+    ]
+
+    result = insert_resource(
+        "film", "film_id", film_data.episode_id, film_columns, film_values
+    )
+
+    # TODO
+    # capture all characters
+    # film_data.characters
+    # only values will change
+    # column list can be once created and re-used
+
+    character_data = store_characters()
+
+    # TODO
+    # capture all planets
+    # film_data.planets
+    # only values will change
+    # column list can be once created and re-used
 
 
-    # execute the query
+
+
+
+
+

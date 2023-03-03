@@ -45,7 +45,6 @@ def insert_resource(
         values ({primary_value}, {value_fields});"""
 
         breakpoint()
-
         result = cursor.execute(sql_magic)
         conn.commit()
     return result
