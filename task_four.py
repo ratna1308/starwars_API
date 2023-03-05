@@ -53,6 +53,7 @@ def store_characters():
             char_values
         )
         characters_data.append(char)
+        breakpoint()
     return characters_data
 
 breakpoint()
@@ -96,7 +97,7 @@ if __name__ == "__main__":
     # column list can be once created and re-used
 
     character_data = store_characters()
-
+    #checking only github repo clone
     # TODO
     # capture all planets
     # film_data.planets
