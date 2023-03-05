@@ -11,13 +11,15 @@ For example - "A new hope" movie has following resource endpoints -
 - species  40
 """
 
+from multiprocessing.pool import ThreadPool
+
 from resources.films import Film   # resource model
 from models.datamodels.films import Film_  # pydantic model
 from models.datamodels.characters import Character_
 
 from dal.db_conn_helper import get_db_conn
 from dal.dml import insert_resource
-from utils.fetch_data import hit_url
+from utils.fetch_data import hit_url, fetch_char_names
 from utils.timing import timeit
 
 
@@ -43,7 +45,7 @@ def store_characters():
             char.mass,
             char.hair_color
         ]
-        # breakpoint()
+
         char_id = int(character.split("/")[-2])
         result = insert_resource(
             "characters",
@@ -53,10 +55,9 @@ def store_characters():
             char_values
         )
         characters_data.append(char)
-        breakpoint()
     return characters_data
 
-breakpoint()
+
 if __name__ == "__main__":
     data = Film().get_sample_data(id_=1)
     film_data = Film_(**data)
@@ -86,9 +87,16 @@ if __name__ == "__main__":
         film_data.url,
     ]
 
+    # DB operation
     result = insert_resource(
         "film", "film_id", film_data.episode_id, film_columns, film_values
     )
+
+    characters = film_data.characters
+    pool = ThreadPool(5)
+    results = pool.map(fetch_char_names, characters)
+
+    breakpoint()
 
     # TODO
     # capture all characters
@@ -97,15 +105,12 @@ if __name__ == "__main__":
     # column list can be once created and re-used
 
     character_data = store_characters()
-    #checking only github repo clone
+    #second changes for github clone
     # TODO
     # capture all planets
     # film_data.planets
     # only values will change
     # column list can be once created and re-used
-
-
-
 
 
 
