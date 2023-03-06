@@ -79,7 +79,7 @@ if __name__ == "__main__":
     # second task : capture characters
     second_result = second_task(first_result)
     # pprint(second_result)
-    #developer one change
+    #third change
     # third task : capture planets
     third_result = third_task(first_result)
     # pprint(third_result)
