@@ -80,6 +80,7 @@ if __name__ == "__main__":
     second_result = second_task(first_result)
     # pprint(second_result)
     #developer one change
+    #developer 2 change
     # third task : capture planets
     third_result = third_task(first_result)
     # pprint(third_result)
