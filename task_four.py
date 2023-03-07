@@ -1,5 +1,6 @@
 """
 TODO
+todo1
 1. Pull data for the first movie ("A New Hope") and save in DB.
 2. Replace the data for each endpoint listed in the JSON object and insert
 that data into database table
