@@ -3,6 +3,5 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/starwar_API" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/starwars_API" vcs="Git" />
   </component>
 </project>
